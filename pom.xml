@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>enc-dec</artifactId>
+    <groupId>com.pseudo.enc-dec</groupId>
+    <version>1.0</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_2.12</artifactId>
+            <version>3.0.4</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>artifactory-libs-releases</id>
+            <name>libs-releases</name>
+            <url>https://code.duwamish.com/artifactory/libs-release/</url>
+        </repository>
+        <repository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>artifactory-libs-snapshot</id>
+            <name>libs-snapshot</name>
+            <url>https://code.duwamish.com/artifactory/libs-snapshot/</url>
+        </repository>
+    </repositories>
+
+</project>
