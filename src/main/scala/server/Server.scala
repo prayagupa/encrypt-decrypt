@@ -6,6 +6,7 @@ import java.nio.file.{Files, Paths}
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.{KeyFactory, PrivateKey}
 import javax.crypto.Cipher
+import javax.xml.bind.DatatypeConverter
 
 import com.typesafe.config.ConfigFactory
 
@@ -50,13 +51,15 @@ class Server {
         requestPayload = new String(charArray)
       }
 
-      println(requestPayload)
+      println(requestPayload.getBytes.length)
       val response = new PrintWriter(clientConnection.getOutputStream)
 
       response.println("HTTP/1.0 200 OK")
-      response.println("Content-Type: application/json;")
-      response.println("{\"name\": \"prayagupd\"}")
-      response.println(decrypt("src/main/resources/keypair_DER/private_key.pem", requestPayload.getBytes))
+      response.println("Content-Type: text/html")
+      decrypt("src/main/resources/keypair_DER/private_key.der", DatatypeConverter.parseHexBinary(requestPayload)) match {
+        case Right(x) => response.println(x)
+        case Left(x) => response.println(x.getMessage)
+      }
 
       response.flush()
       clientConnection.close()
@@ -72,18 +75,24 @@ object Server {
     new Server().start()
   }
 
-  private def readPrivateKey(filename: String): PrivateKey = {
-    val keyFactory = KeyFactory.getInstance("RSA")
+  private def readPrivateKey(filename: String): Either[Throwable, PrivateKey] = {
+    try {
+      val keyFactory = KeyFactory.getInstance("RSA")
 
-    val privateKeySpec = new PKCS8EncodedKeySpec(Files.readAllBytes(Paths.get(filename)))
+      val privateKeySpec = new PKCS8EncodedKeySpec(Files.readAllBytes(Paths.get(filename)))
 
-    keyFactory.generatePrivate(privateKeySpec)
+      Right(keyFactory.generatePrivate(privateKeySpec))
+    } catch {
+      case e: Throwable => Left(e)
+    }
   }
 
-  def decrypt(privateKey: String, ciphertext: Array[Byte]): Array[Byte] = {
-    val cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding")
-    cipher.init(Cipher.DECRYPT_MODE, readPrivateKey(privateKey))
-    cipher.doFinal(ciphertext)
+  def decrypt(privateKey: String, ciphertext: Array[Byte]): Either[Throwable, Array[Byte]] = {
+    readPrivateKey(privateKey).map(primary => {
+      val cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding")
+      cipher.init(Cipher.DECRYPT_MODE, primary)
+      cipher.doFinal(ciphertext)
+    })
   }
 
 }
