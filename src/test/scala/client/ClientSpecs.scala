@@ -1,5 +1,7 @@
 package client
 
+import java.math.BigInteger
+
 import org.scalatest.{FunSuite, Matchers}
 
 class ClientSpecs extends FunSuite with Matchers {
@@ -8,7 +10,8 @@ class ClientSpecs extends FunSuite with Matchers {
 
     val enc = Client.enc("src/main/resources/keypair_PEM/public_key.pem", "data to encrypt")
 
-    println(new String(enc))
+    val hex = new BigInteger(enc).toString(16)
 
+    println(hex)
   }
 }

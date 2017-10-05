@@ -56,7 +56,7 @@ class Server {
       response.println("HTTP/1.0 200 OK")
       response.println("Content-Type: application/json;")
       response.println("{\"name\": \"prayagupd\"}")
-      response.println(decrypt("src/main/resources/keypair_DER/private.der", requestPayload.getBytes))
+      response.println(decrypt("src/main/resources/keypair_DER/private_key.pem", requestPayload.getBytes))
 
       response.flush()
       clientConnection.close()
