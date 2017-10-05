@@ -1,6 +1,6 @@
 package server
 
-import java.io.{BufferedReader, InputStreamReader, PrintWriter}
+import java.io._
 import java.net._
 import java.nio.file.{Files, Paths}
 import java.security.spec.PKCS8EncodedKeySpec
@@ -26,42 +26,39 @@ class Server {
 
       val clientConnection = server.accept()
       val is = clientConnection.getInputStream
-      val out = new PrintWriter(clientConnection.getOutputStream)
-      val in = new BufferedReader(new InputStreamReader(is))
+      val inputStream = new BufferedReader(new InputStreamReader(is))
       var line: String = null
-      line = in.readLine
+      line = inputStream.readLine
       val request_method = line
-      System.out.println("HTTP-HEADER: " + line)
+
+      println("HTTP-HEADER: " + line)
       line = ""
       // looks for post data
       var postDataStartingIndex = -1
-      while ( {
-        (line = in.readLine) != null && (line.length != 0)
-      }) {
-        //println("HTTP-HEADER: " + line)
+      while ( {(line = inputStream.readLine) != null && (line.length != 0)}) {
         if (line.indexOf("Content-Length:") > -1)
           postDataStartingIndex = new Integer(line.substring(line.indexOf("Content-Length:") + 16, line.length)).intValue
       }
 
       var requestPayload = ""
-      // read the post data
       if (postDataStartingIndex > 0) {
         val charArray = new Array[Char](postDataStartingIndex)
-        in.read(charArray, 0, postDataStartingIndex)
+        inputStream.read(charArray, 0, postDataStartingIndex)
         requestPayload = new String(charArray)
       }
 
-      println(requestPayload.getBytes.length)
-      val response = new PrintWriter(clientConnection.getOutputStream)
+      println(requestPayload)
+      val response = new BufferedWriter(new OutputStreamWriter(clientConnection.getOutputStream()))
 
-      response.println("HTTP/1.0 200 OK")
-      response.println("Content-Type: text/html")
+      response.write("HTTP/1.1 200 OK\r\n")
+      response.write("Content-Type: application/json\r\n")
+      response.write("\r\n")
       decrypt("src/main/resources/keypair_DER/private_key.der", DatatypeConverter.parseHexBinary(requestPayload)) match {
-        case Right(x) => response.println(x)
-        case Left(x) => response.println(x.getMessage)
+        case Right(decBytes) => response.write(s"""{"decrypted": "${new String(decBytes)}", "encrypted": "$requestPayload"}""")
+        case Left(error) => response.write(s"""{"error": "${error.getMessage}""")
       }
-
-      response.flush()
+      response.close()
+      inputStream.close()
       clientConnection.close()
     }
   }
