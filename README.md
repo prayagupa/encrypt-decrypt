@@ -24,3 +24,15 @@ https://stackoverflow.com/a/37397545/432903
 http://www.mysamplecode.com/2011/08/rsa-encryption-decryption-using-bouncy.html
 
 http://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
+
+https://en.wikipedia.org/wiki/Padding_(cryptography)
+
+```
+Official messages often start and end in predictable ways: My dear ambassador, Weather report, Sincerely yours, etc. The primary use of padding with classical ciphers is to prevent the cryptanalyst from using that predictability to find known plaintext[1] that aids in breaking the encryption. Random length padding also prevents an attacker from knowing the exact length of the plaintext message.
+```
+
+https://en.wikipedia.org/wiki/Optimal_asymmetric_encryption_padding
+
+```
+a padding scheme often used together with RSA encryption.
+```
