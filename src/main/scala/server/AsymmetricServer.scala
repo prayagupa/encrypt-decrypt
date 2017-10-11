@@ -10,11 +10,11 @@ import javax.xml.bind.DatatypeConverter
 
 import com.typesafe.config.ConfigFactory
 
-class Server {
+class AsymmetricServer(privateKey: String) extends Decryptor {
 
   val config = ConfigFactory.load("application.conf")
 
-  import Server._
+  import AsymmetricServer._
 
   def start(): Unit = {
     val server = new ServerSocket(9999)
@@ -53,7 +53,8 @@ class Server {
       response.write("HTTP/1.1 200 OK\r\n")
       response.write("Content-Type: application/json\r\n")
       response.write("\r\n")
-      decrypt("src/main/resources/keypair_DER/private_key.der", DatatypeConverter.parseHexBinary(requestPayload)) match {
+      val bytes = DatatypeConverter.parseHexBinary(requestPayload)
+      decrypt(new String(bytes)) match {
         case Right(decBytes) => response.write(s"""{"decrypted": "${new String(decBytes)}", "encrypted": "$requestPayload"}""")
         case Left(error) => response.write(s"""{"error": "${error.getMessage}""")
       }
@@ -61,15 +62,6 @@ class Server {
       inputStream.close()
       clientConnection.close()
     }
-  }
-
-}
-
-object Server {
-
-  def main(args: Array[String]): Unit = {
-
-    new Server().start()
   }
 
   private def readPrivateKey(filename: String): Either[Throwable, PrivateKey] = {
@@ -84,12 +76,23 @@ object Server {
     }
   }
 
-  def decrypt(privateKey: String, ciphertext: Array[Byte]): Either[Throwable, Array[Byte]] = {
+  def decrypt(hex: String): Either[Throwable, String] = {
+    val toBytesToString = DatatypeConverter.parseHexBinary(hex)
+
     readPrivateKey(privateKey).map(primary => {
       val cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding")
       cipher.init(Cipher.DECRYPT_MODE, primary)
-      cipher.doFinal(ciphertext)
+      new String(cipher.doFinal(toBytesToString))
     })
+  }
+
+}
+
+object AsymmetricServer {
+
+  def main(args: Array[String]): Unit = {
+
+    new AsymmetricServer("src/main/resources/keypair_DER/private_key.der").start()
   }
 
 }
