@@ -1,38 +1,57 @@
 client enc - server dec
 -----------------------
 
-pub private key pair example in scala
-
+```
+brew install gnupg
+```
 
 ```bash
+$ gpg --gen-key
+gpg (GnuPG) 2.2.7; Copyright (C) 2018 Free Software Foundation, Inc.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
 
-curl -XPOST 10.0.0.179:9999 -d "5aae8b0e3db810c13876838452b18cbede9890c665f2fd2ffe2dcccd7ba414687c1a9b531ca359e26c6f4433c54644c7bdbff159e55a5544905fed7598397476fdc4164c424c1505fd7cf5b2d0fc22b6981b2e12b4daf2c55180e4324c3917a1bbbe2d03ac55b801d5f6dcdc4e57ed9404b85082574530dbb80288de837757d0f51d49d74bd31297c75d18f03c43a403f7ffd21e69c556afa6747b02df8bbff6389b5e31ff5eff3eb2d402f8b97eb310391c73212ddb51fa6b1b130a51583d8a33151cf66fd3abc18ed22f5e78b2962cb99b881ee5f63e09096c10d96f95a830cf7f8e96b2efb54f7d7b7955786b3edb0f0678c09a86b67b1ded612ad4ad5be3" -H "Accept: application/json"
+Note: Use "gpg --full-generate-key" for a full featured key generation dialog.
 
-{"decrypted": "data to encrypt", "encrypted": "5aae8b0e3db810c13876838452b18cbede9890c665f2fd2ffe2dcccd7ba414687c1a9b531ca359e26c6f4433c54644c7bdbff159e55a5544905fed7598397476fdc4164c424c1505fd7cf5b2d0fc22b6981b2e12b4daf2c55180e4324c3917a1bbbe2d03ac55b801d5f6dcdc4e57ed9404b85082574530dbb80288de837757d0f51d49d74bd31297c75d18f03c43a403f7ffd21e69c556afa6747b02df8bbff6389b5e31ff5eff3eb2d402f8b97eb310391c73212ddb51fa6b1b130a51583d8a33151cf66fd3abc18ed22f5e78b2962cb99b881ee5f63e09096c10d96f95a830cf7f8e96b2efb54f7d7b7955786b3edb0f0678c09a86b67b1ded612ad4ad5be3"}
+GnuPG needs to construct a user ID to identify your key.
+
+Real name: upd
+Email address: upd@gmail.com
+You selected this USER-ID:         
+    "upd <upd@gmail.com>"
+
+Change (N)ame, (E)mail, or (O)kay/(Q)uit? O
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+gpg: /Users/upd/.gnupg/trustdb.gpg: trustdb created
+gpg: key 8306655FE9F6361F marked as ultimately trusted
+gpg: directory '/Users/upd/.gnupg/openpgp-revocs.d' created
+gpg: revocation certificate stored as '/Users/upd/.gnupg/openpgp-revocs.d/26E6D111D1205398935EB04D8306655FE9F6361F.rev'
+public and secret key created and signed.
+
+pub   rsa2048 2018-05-17 [SC] [expires: 2020-05-16]
+      26E6D111D1205398935EB04D8306655FE9F6361F
+uid                      upd <upd@gmail.com>
+sub   rsa2048 2018-05-17 [E] [expires: 2020-05-16]
 ```
 
-
-transformation format
----------------------
-
-RSA/ECB/OAEPWithSHA1AndMGF1Padding
-
-https://stackoverflow.com/a/19002068/432903
-
-https://stackoverflow.com/a/37397545/432903
-
-http://www.mysamplecode.com/2011/08/rsa-encryption-decryption-using-bouncy.html
-
-http://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
-
-https://en.wikipedia.org/wiki/Padding_(cryptography)
-
 ```
-Official messages often start and end in predictable ways: My dear ambassador, Weather report, Sincerely yours, etc. The primary use of padding with classical ciphers is to prevent the cryptanalyst from using that predictability to find known plaintext[1] that aids in breaking the encryption. Random length padding also prevents an attacker from knowing the exact length of the plaintext message.
+$ gpg --list-keys
+gpg: checking the trustdb
+gpg: marginals needed: 3  completes needed: 1  trust model: pgp
+gpg: depth: 0  valid:   1  signed:   0  trust: 0-, 0q, 0n, 0m, 0f, 1u
+gpg: next trustdb check due at 2020-05-16
+/Users/upd/.gnupg/pubring.kbx
+----------------------------------
+pub   rsa2048 2018-05-17 [SC] [expires: 2020-05-16]
+      26E6D111D1205398935EB04D8306655FE9F6361F
+uid           [ultimate] upd <upd@gmail.com>
+sub   rsa2048 2018-05-17 [E] [expires: 2020-05-16]
 ```
 
-https://en.wikipedia.org/wiki/Optimal_asymmetric_encryption_padding
-
-```
-a padding scheme often used together with RSA encryption.
-```
