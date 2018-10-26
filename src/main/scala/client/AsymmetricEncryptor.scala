@@ -24,4 +24,3 @@ class AsymmetricEncryptor(val publicKey: String) extends Encryptor {
     })
   }
 }
-

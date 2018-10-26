@@ -2,8 +2,12 @@ name := "enc-dec-scala"
 
 version := "0.1"
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.7"
 
-resolvers += "libs-releases" at "https://code.duwamish.com/artifactory/libs-release-local"
+libraryDependencies ++= Seq(
+  "com.typesafe" % "config" % "1.3.3",
+  "org.scalatest" %% "scalatest" % "3.0.4"
+)
 
-resolvers += "libs-snapshots" at "https://code.duwamish.com/artifactory/libs-snapshot-local"
+//resolvers += "libs-releases" at "https://code.duwamish.com/artifactory/libs-release-local"
+//resolvers += "libs-snapshots" at "https://code.duwamish.com/artifactory/libs-snapshot-local"
