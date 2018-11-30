@@ -2,7 +2,7 @@ client enc - server dec
 -----------------------
 
 This project shows how to **encrypt a data in client** using public key;
-and send it over to server and decrypt it using **"pub private key pair"** in scala.
+and send it over to server and decrypt it using **"private key"** in scala.
 
 
 example:
@@ -35,7 +35,16 @@ http://www.mysamplecode.com/2011/08/java-rsa-encrypt-string-using-bouncy.html
 https://en.wikipedia.org/wiki/Padding_(cryptography)
 
 ```
-Official messages often start and end in predictable ways: My dear ambassador, Weather report, Sincerely yours, etc. The primary use of padding with classical ciphers is to prevent the cryptanalyst from using that predictability to find known plaintext[1] that aids in breaking the encryption. Random length padding also prevents an attacker from knowing the exact length of the plaintext message.
+Official messages often start and end in predictable ways:
+ 
+My dear ambassador, 
+    Weather report, 
+Sincerely yours, etc. 
+
+The primary use of padding with classical ciphers is to prevent the cryptanalyst 
+from using that predictability to find known plaintext that aids in breaking the encryption. 
+
+Random length padding also prevents an attacker from knowing the exact length of the plaintext message.
 ```
 
 https://en.wikipedia.org/wiki/Optimal_asymmetric_encryption_padding
