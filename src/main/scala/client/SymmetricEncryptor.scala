@@ -3,8 +3,6 @@ package client
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
-import sun.misc.BASE64Encoder
-
 class SymmetricEncryptor(secretKey: String) extends Encryptor {
 
   private val ALGORITHM = "AES"
@@ -15,7 +13,7 @@ class SymmetricEncryptor(secretKey: String) extends Encryptor {
       val c = Cipher.getInstance(ALGORITHM)
       c.init(Cipher.ENCRYPT_MODE, key)
       val encValue = c.doFinal(data.getBytes)
-      Option(new BASE64Encoder().encode(encValue))
+      Option(java.util.Base64.getEncoder.encodeToString(encValue))
     } catch {
       case ex: Exception => None
     }

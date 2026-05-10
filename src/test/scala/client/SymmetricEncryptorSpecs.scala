@@ -1,11 +1,9 @@
 package client
 
-import javax.crypto.spec.SecretKeySpec
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-import org.scalatest.{FunSuite, Matchers}
-import sun.misc.BASE64Decoder
-
-class SymmetricEncryptorSpecs extends FunSuite with Matchers {
+class SymmetricEncryptorSpecs extends AnyFunSuite with Matchers {
 
   val symmetricEncryptor = new SymmetricEncryptor("prayagupd")
 

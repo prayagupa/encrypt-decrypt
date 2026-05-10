@@ -3,8 +3,6 @@ package server
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
-import sun.misc.BASE64Decoder
-
 class SymmetricDecryptor(secretKey: String) extends Decryptor {
 
   val ALGORITHM = "AES"
@@ -17,7 +15,7 @@ class SymmetricDecryptor(secretKey: String) extends Decryptor {
 
       c.init(Cipher.DECRYPT_MODE, key)
 
-      val decorVal = new BASE64Decoder().decodeBuffer(hexData)
+      val decorVal = java.util.Base64.getDecoder.decode(hexData)
       val decValue = c.doFinal(decorVal)
 
       Right(new String(decValue))

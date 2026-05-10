@@ -54,6 +54,6 @@ a padding scheme often used together with RSA encryption.
 ```
 
 Also see: 
-- https://github.com/prayagupd/tls.kotlin
-- https://github.com/prayagupd/tls-python
+- https://github.com/prayagupa/tls.kotlin
+- https://github.com/prayagupa/tls-python
 

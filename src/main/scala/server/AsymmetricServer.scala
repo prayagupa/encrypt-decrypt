@@ -6,7 +6,6 @@ import java.nio.file.{Files, Paths}
 import java.security.spec.PKCS8EncodedKeySpec
 import java.security.{KeyFactory, PrivateKey}
 import javax.crypto.Cipher
-import javax.xml.bind.DatatypeConverter
 
 import com.typesafe.config.ConfigFactory
 
@@ -35,9 +34,11 @@ class AsymmetricServer(privateKey: String) extends Decryptor {
       line = ""
       // looks for post data
       var postDataStartingIndex = -1
-      while ( {(line = inputStream.readLine) != null && (line.length != 0)}) {
+      line = inputStream.readLine
+      while (line != null && line.length != 0) {
         if (line.indexOf("Content-Length:") > -1)
-          postDataStartingIndex = new Integer(line.substring(line.indexOf("Content-Length:") + 16, line.length)).intValue
+          postDataStartingIndex = line.substring(line.indexOf("Content-Length:") + 16, line.length).toInt
+        line = inputStream.readLine
       }
 
       var requestPayload = ""
@@ -53,9 +54,9 @@ class AsymmetricServer(privateKey: String) extends Decryptor {
       response.write("HTTP/1.1 200 OK\r\n")
       response.write("Content-Type: application/json\r\n")
       response.write("\r\n")
-      val bytes = DatatypeConverter.parseHexBinary(requestPayload)
-      decrypt(new String(bytes)) match {
-        case Right(decBytes) => response.write(s"""{"decrypted": "${new String(decBytes)}", "encrypted": "$requestPayload"}""")
+      val trimmedPayload = requestPayload.trim
+      decrypt(trimmedPayload) match {
+        case Right(decBytes) => response.write(s"""{"decrypted": "${new String(decBytes)}", "encrypted": "$trimmedPayload"}""")
         case Left(error) => response.write(s"""{"error": "${error.getMessage}""")
       }
       response.close()
@@ -77,7 +78,7 @@ class AsymmetricServer(privateKey: String) extends Decryptor {
   }
 
   def decrypt(hex: String): Either[Throwable, String] = {
-    val toBytesToString = DatatypeConverter.parseHexBinary(hex)
+    val toBytesToString = java.util.HexFormat.of().parseHex(hex)
 
     readPrivateKey(privateKey).map(primary => {
       val cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA1AndMGF1Padding")

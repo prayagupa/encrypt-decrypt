@@ -2,9 +2,9 @@ name := "enc-client"
 
 version := "0.1"
 
-scalaVersion := "2.12.7"
+scalaVersion := "3.3.4"
 
 libraryDependencies ++= Seq(
-  "com.typesafe" % "config" % "1.3.3",
-  "org.scalatest" %% "scalatest" % "3.0.4"
+  "com.typesafe" % "config" % "1.4.3",
+  "org.scalatest" %% "scalatest" % "3.2.19"
 )

@@ -2,9 +2,10 @@ package client
 
 import java.math.BigInteger
 
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class AsymmetricEncryptorSpecs extends FunSuite with Matchers {
+class AsymmetricEncryptorSpecs extends AnyFunSuite with Matchers {
 
   test("given private key, encrypts data") {
 

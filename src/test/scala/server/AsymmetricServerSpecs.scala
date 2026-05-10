@@ -1,11 +1,10 @@
 package server
 
-import javax.xml.bind.DatatypeConverter
-
 import client.AsymmetricEncryptor
-import org.scalatest.{FunSuite, Matchers}
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 
-class AsymmetricServerSpecs extends FunSuite with Matchers {
+class AsymmetricServerSpecs extends AnyFunSuite with Matchers {
 
   test("given private key, decrypts the bytes") {
     val format = "der"
